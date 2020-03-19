@@ -1,5 +1,5 @@
 spring:
   cloud:
     alicloud:
-      access-key: LTAI3fPfBMamgvxj
-      secret-key: 7S24tF7mT4e5HLndPXP1JmJZ4qAdcs
+      access-key: 
+      secret-key: 
