@@ -1,0 +1,19 @@
+dubbo:
+  application:
+    name: user-service-provider
+  scan:
+    base-packages: com.xmall.user.provider.service.impl
+  cloud:
+    subscribed-services: "*"
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+#  registry:
+#    address:
+#    #   The Spring Cloud Dubbo's registry extension
+#    address: spring-cloud://localhost:8848
+
+provider:
+  application:
+    name: user-service-provider

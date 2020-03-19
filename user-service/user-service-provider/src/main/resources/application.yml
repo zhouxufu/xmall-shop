@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name:
+    url: jdbc:mysql://rm-2ze79s5qs52l8ol274o.mysql.rds.aliyuncs.com/user_service?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: coderzzz
+    password: coderzzz
+
