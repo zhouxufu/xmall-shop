@@ -1,5 +1,6 @@
 package com.xmall.common.core.response;
 
+import com.xmall.common.core.exception.ErrorCode;
 import com.xmall.common.core.exception.RpcException;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -56,6 +57,17 @@ public class CommonResult<T> {
      */
     public static <T> CommonResult<T> error(Integer errorCode, String message) {
         return new CommonResult<T>().setCode(errorCode).setMessage(message);
+    }
+
+    /**
+     * 失败返回值
+     *
+     * @param errorCode 错误码
+     * @param <T>       返回值泛型
+     * @return
+     */
+    public static <T> CommonResult<T> error(ErrorCode errorCode) {
+        return error(errorCode.getErrorCode(), errorCode.getMessage());
     }
 
     /**

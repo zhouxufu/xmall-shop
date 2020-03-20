@@ -1,8 +1,11 @@
 package com.xmall.user.repository.po;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.*;
+
 import lombok.Data;
+import tk.mybatis.mapper.annotation.LogicDelete;
 
 /**
  * @author zhouxufu
@@ -10,6 +13,17 @@ import lombok.Data;
 @Data
 @Table(name = "user_account")
 public class UserAccount {
+
+    /**
+     * 用户账号状态
+     * -1：已删除；
+     * 0：禁用 （禁止在注册）
+     * 1：启用
+     */
+    public static final Byte DELETE_STATUS = Byte.valueOf("-1");
+    public static final Byte DISABLE_STATUS = Byte.valueOf("0");
+    public static final Byte ENABLE_STATUS = Byte.valueOf("1");
+
     @Id
     @GeneratedValue(generator = "JDBC")
     private Long id;
@@ -25,8 +39,8 @@ public class UserAccount {
     private Byte status;
 
     @Column(name = "gmt_create")
-    private Date gmtCreate;
+    private LocalDateTime gmtCreate;
 
     @Column(name = "gmt_modified")
-    private Date gmtModified;
+    private LocalDateTime gmtModified;
 }

@@ -21,6 +21,7 @@ public interface SmsRepository {
      *
      * @param verifyScope 验证码作用域
      * @param phone       手机号
+     * @return 手机号存储的验证码，不存在验证码返回null
      */
     String getVerifyCode(String verifyScope, String phone);
 }

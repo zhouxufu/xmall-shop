@@ -7,5 +7,7 @@ public class UserPhoneRegisterDTO {
 
     private String phone;
 
+    private String password;
+
     private String verifyCode;
 }

@@ -4,7 +4,10 @@ import com.xmall.user.repository.facade.UserAccountRepository;
 import com.xmall.user.repository.mapper.UserAccountMapper;
 import com.xmall.user.repository.po.UserAccount;
 import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.common.ExampleMapper;
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.weekend.Weekend;
+import tk.mybatis.mapper.weekend.WeekendSqls;
 
 /**
  * 用户账户仓储实现类
@@ -27,23 +30,29 @@ public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     @Override
     public boolean phoneExists(String phone) {
-        UserAccount userAccount = new UserAccount();
-        userAccount.setPhone(phone);
-        return userAccountMapper.countUserAccount(userAccount) > 0;
+        Example example = new Example.Builder(UserAccount.class).where(WeekendSqls.<UserAccount>custom()
+                .andEqualTo(UserAccount::getPhone, phone)
+                .andNotEqualTo(UserAccount::getStatus, UserAccount.DELETE_STATUS)
+        ).build();
+        return userAccountMapper.selectCountByExample(example) > 0;
     }
 
     @Override
     public boolean emailExists(String email) {
-        UserAccount userAccount = new UserAccount();
-        userAccount.setEmail(email);
-        return userAccountMapper.countUserAccount(userAccount) > 0;
+        Example example = new Example.Builder(UserAccount.class).where(WeekendSqls.<UserAccount>custom()
+                .andEqualTo(UserAccount::getEmail, email)
+                .andNotEqualTo(UserAccount::getStatus, UserAccount.DELETE_STATUS)
+        ).build();
+        return userAccountMapper.selectCountByExample(example) > 0;
     }
 
     @Override
     public boolean usernameExists(String username) {
-        UserAccount userAccount = new UserAccount();
-        userAccount.setUsername(username);
-        return userAccountMapper.countUserAccount(userAccount) > 0;
+        Example example = new Example.Builder(UserAccount.class).where(WeekendSqls.<UserAccount>custom()
+                .andEqualTo(UserAccount::getUsername, username)
+                .andNotEqualTo(UserAccount::getStatus, UserAccount.DELETE_STATUS)
+        ).build();
+        return userAccountMapper.selectCountByExample(example) > 0;
     }
 
 }

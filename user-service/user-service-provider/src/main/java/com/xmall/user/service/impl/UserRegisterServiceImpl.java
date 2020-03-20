@@ -7,10 +7,14 @@ import com.xmall.common.core.sentinel.DefaultFallback;
 import com.xmall.third.constants.VerifyCodeScopeEnum;
 import com.xmall.third.service.SmsService;
 import com.xmall.user.dto.UserPhoneRegisterDTO;
+import com.xmall.user.exception.ErrorCodeEnum;
 import com.xmall.user.repository.facade.UserAccountRepository;
+import com.xmall.user.repository.po.UserAccount;
 import com.xmall.user.service.UserRegisterService;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+
+import java.time.LocalDateTime;
 
 /**
  * 用户注册service
@@ -47,7 +51,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         String phone = userPhoneRegisterDTO.getPhone();
         boolean exists = userAccountRepository.phoneExists(phone);
         if (exists) {
-            return CommonResult.error(null, "手机号已被注册");
+            return CommonResult.error(ErrorCodeEnum.alreadyRegister);
         }
         CommonResult<Boolean> checkVerifyCode = smsService.checkVerifyCode(VerifyCodeScopeEnum.register, phone, userPhoneRegisterDTO.getVerifyCode());
         if (!checkVerifyCode.isSuccess()) {
@@ -56,9 +60,23 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         }
         Boolean verifyIsTrue = checkVerifyCode.getData();
         if (!verifyIsTrue) {
-            return CommonResult.error(100, "");
+            return CommonResult.error(ErrorCodeEnum.verifyError);
         }
-        userAccountRepository.registerByPhone(null);
+        UserAccount userAccount = getUserAccount(userPhoneRegisterDTO.getPhone(), userPhoneRegisterDTO.getPassword());
+        //入库
+        userAccountRepository.registerByPhone(userAccount);
         return CommonResult.ok();
+    }
+
+    private UserAccount getUserAccount(String phone, String password) {
+        LocalDateTime now = LocalDateTime.now();
+        UserAccount userAccount = new UserAccount();
+        userAccount.setPhone(phone);
+        //todo 密码进行加密
+        userAccount.setPassword(password);
+        userAccount.setStatus(UserAccount.ENABLE_STATUS);
+        userAccount.setGmtCreate(now);
+        userAccount.setGmtModified(now);
+        return userAccount;
     }
 }
