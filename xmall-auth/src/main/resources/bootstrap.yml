@@ -1,27 +1,25 @@
-server:
-  port: 8001
-
 spring:
   application:
-    name: xmall-user
+    name: xmall-oauth
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848 #nacos-server address
+        server-addr: 188.131.191.43:8848 #nacos-server address
       config:
-        server-addr: localhost:8848 #nacos-server address
+        server-addr: 188.131.191.43:8848 #nacos-server address
         enabled: true
         prefix: ${spring.application.name} # prefix+active+fileExtension = nacos data-id
         file-extension: yml
     sentinel:
       transport:
-        dashboard: localhost:8080 #控制台地址
+        dashboard: 188.131.191.43:8080 #控制台地址
         port: 8719 #从8719端口开始扫描，直到扫描到可以和控制台交互的端口
 
 dubbo:
   application:
-    name: xmall-user #这里不能用${spring.application.name}
+    name: xmall-oauth #这里不能用${spring.application.name}
   cloud:
     subscribed-services: user-service-provider #订阅的服务列表多个服务,分割
+
 #  registry:
 #    address: spring-cloud://localhost

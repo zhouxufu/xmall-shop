@@ -19,6 +19,7 @@
         <module>xmall-user</module>
         <module>xmall-generator</module>
         <module>third-service</module>
+        <module>xmall-auth</module>
     </modules>
 
     <properties>

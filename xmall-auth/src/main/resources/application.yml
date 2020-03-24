@@ -1,0 +1,9 @@
+server:
+  port: 8101
+
+spring:
+  datasource:
+    driver-class-name:
+    url: jdbc:mysql://rm-2ze79s5qs52l8ol274o.mysql.rds.aliyuncs.com/auth_service?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: coderzzz
+    password: coderzzz
