@@ -11,8 +11,10 @@ import com.xmall.user.exception.ErrorCodeEnum;
 import com.xmall.user.repository.facade.UserAccountRepository;
 import com.xmall.user.repository.po.UserAccount;
 import com.xmall.user.service.UserRegisterService;
+import org.apache.dubbo.config.annotation.Reference;
 import org.apache.dubbo.config.annotation.Service;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -21,11 +23,13 @@ import java.time.LocalDateTime;
  *
  * @author zhouxufu
  */
-@Service(protocol = "dubbo")
+@Service(protocol = "dubbo", version = "1.0")
+
 @RefreshScope
 public class UserRegisterServiceImpl implements UserRegisterService {
 
     private final UserAccountRepository userAccountRepository;
+    @Reference(version = "1.0")
     private final SmsService smsService;
 
     public UserRegisterServiceImpl(UserAccountRepository userAccountRepository,
@@ -62,18 +66,17 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         if (!verifyIsTrue) {
             return CommonResult.error(ErrorCodeEnum.verifyError);
         }
-        UserAccount userAccount = getUserAccount(userPhoneRegisterDTO.getPhone(), userPhoneRegisterDTO.getPassword());
+        UserAccount userAccount = generateUserAccount(userPhoneRegisterDTO.getPhone(), userPhoneRegisterDTO.getPassword());
         //入库
         userAccountRepository.registerByPhone(userAccount);
         return CommonResult.ok();
     }
 
-    private UserAccount getUserAccount(String phone, String password) {
+    private UserAccount generateUserAccount(String phone, String password) {
         LocalDateTime now = LocalDateTime.now();
         UserAccount userAccount = new UserAccount();
         userAccount.setPhone(phone);
-        //todo 密码进行加密
-        userAccount.setPassword(password);
+        userAccount.setPassword(new BCryptPasswordEncoder().encode(password));
         userAccount.setStatus(UserAccount.ENABLE_STATUS);
         userAccount.setGmtCreate(now);
         userAccount.setGmtModified(now);
