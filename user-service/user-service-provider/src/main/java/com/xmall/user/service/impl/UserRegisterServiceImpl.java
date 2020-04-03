@@ -29,13 +29,12 @@ import java.time.LocalDateTime;
 public class UserRegisterServiceImpl implements UserRegisterService {
 
     private final UserAccountRepository userAccountRepository;
-    @Reference(version = "1.0")
-    private final SmsService smsService;
 
-    public UserRegisterServiceImpl(UserAccountRepository userAccountRepository,
-                                   SmsService smsService) {
+    @Reference(version = "1.0", check = false)
+    private SmsService smsService;
+
+    public UserRegisterServiceImpl(UserAccountRepository userAccountRepository) {
         this.userAccountRepository = userAccountRepository;
-        this.smsService = smsService;
     }
 
     @SentinelResource(

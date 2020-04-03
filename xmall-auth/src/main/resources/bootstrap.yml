@@ -20,6 +20,7 @@ dubbo:
     name: xmall-oauth #这里不能用${spring.application.name}
   cloud:
     subscribed-services: user-service-provider #订阅的服务列表多个服务,分割
-
-#  registry:
-#    address: spring-cloud://localhost
+  consumer:
+    check: false
+  registry:
+    address: spring-cloud://localhost
